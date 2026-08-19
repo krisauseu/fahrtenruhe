@@ -1,0 +1,3 @@
+# Lücken blocken; pro Fahrzeug eine offene Fahrt
+
+Ende-Kilometerstand von Fahrt n muss der Start von Fahrt n+1 sein. Eine Lücke blockt das Speichern, bis eine Zwischenfahrt nachgetragen oder der Stand per Korrekturspur erklärt ist. Das System erzeugt keine automatische Privatfahrt. Pro Fahrzeug gibt es höchstens eine offene Fahrt; nach Absturz wird sie fortgesetzt; über Mitternacht nur noch mit Korrekturspur geschlossen. Begründung: Automatisch privat ist eine erfundene Fahrt. Warnen-und-trotzdem-speichern erzeugt genau die Löcher, an denen Bücher kippen. BFH VI R 38/06 duldet kleine Mängel — das ist kein Freibrief, Löcher einzubauen.

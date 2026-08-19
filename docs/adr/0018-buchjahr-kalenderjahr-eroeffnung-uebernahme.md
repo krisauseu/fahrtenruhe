@@ -1,0 +1,3 @@
+# Buchjahr ist das Kalenderjahr; angebrochen ohne Übernahme nicht nachweistauglich
+
+Das Fahrtenbuch eines Fahrzeugs gilt für ein Kalenderjahr. Am Anfang steht ein Eröffnungs-Kilometerstand. Altbestand darf als gekennzeichnete Übernahme mit Korrekturspur importiert werden. Fehlt die lückenlose Kette ab 1. Januar (oder ab Inbetriebnahme des Fahrzeugs), erklärt die UI das Jahr als nicht nachweistauglich — sie täuscht kein volles Buch vor. Begründung: Die Fahrtenbuchmethode und der 50-%-Test brauchen das Nutzungsjahr, nicht den Rumpf ab Installationsdatum (VI R 35/12). Ein abweichendes Wirtschaftsjahr gehört nicht zur EÜR-Persona (ADR-0002).

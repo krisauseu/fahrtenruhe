@@ -1,0 +1,55 @@
+# Öffentlicher Eingang auf dem Server (ADR-0023).
+# TLS: Let’s Encrypt (Caddy ACME). Nicht ins Compose mounten.
+#
+# Caddy läuft als Systemdienst — diese Datei NICHT als ganze /etc/caddy/Caddyfile
+# überschreiben. Site-Block importieren oder anhängen:
+#
+#   sudo cp deploy/Caddyfile.host /etc/caddy/fahrtenruhe.caddy
+#   # in /etc/caddy/Caddyfile:  import fahrtenruhe.caddy
+#   # app.example.de durch den echten Host ersetzen
+#   sudo caddy validate --config /etc/caddy/Caddyfile
+#   sudo systemctl reload caddy
+#
+# DNS: app.example.de → dieser Host. Port 80 und 443 gehören dem Host-Caddy
+# (Compose-Caddy startet dort nicht). Next: 127.0.0.1:3001, PocketBase: :8091.
+# Optional oben im Host-Caddyfile (global, nur einmal):
+# {
+# 	email du@example.de
+# }
+
+app.example.de {
+	encode gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Permitted-Cross-Domain-Policies none
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	# PocketBase API
+	handle /api/* {
+		reverse_proxy 127.0.0.1:8091
+	}
+
+	# PocketBase Admin-UI und Realtime — bewusst öffentlich über denselben Host
+	handle /_/* {
+		reverse_proxy 127.0.0.1:8091
+	}
+
+	handle /realtime {
+		reverse_proxy 127.0.0.1:8091
+	}
+
+	# Next.js (Host/Proto für Server Actions & Redirects); inkl. /health
+	handle {
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Host {host}
+			header_up X-Forwarded-Host {host}
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Forwarded-For {remote_host}
+		}
+	}
+}
