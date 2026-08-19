@@ -22,7 +22,8 @@ Compose-Caddy im Overlay startet nicht. Next und PocketBase binden nur localhost
 ## 1. Code und `.env`
 
 ```bash
-git clone git@github.com:krisauseu/fahrtenruhe.git
+git clone https://github.com/krisauseu/fahrtenruhe.git
+# oder: git clone git@github.com:krisauseu/fahrtenruhe.git
 cd fahrtenruhe
 cp .env.example .env
 ```
