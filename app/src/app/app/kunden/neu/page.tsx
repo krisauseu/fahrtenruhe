@@ -39,8 +39,8 @@ export default async function KundeNeuPage({
         <CardHeader>
           <CardTitle>Name</CardTitle>
           <CardDescription>
-            Dünner lokaler Stamm. Die Zettelruhe-Kontakt-Id ist optional und nur
-            ein Merker.
+            Dünner lokaler Stamm. Die Zettelruhe-Kontaktnummer ist optional und
+            nur ein Merker.
           </CardDescription>
         </CardHeader>
         <CardContent>

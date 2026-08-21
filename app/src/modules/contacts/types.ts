@@ -1,5 +1,5 @@
 /**
- * Lokaler, dünner Stamm. Optionale Zettelruhe-Ids, kein Live-Sync.
+ * Lokaler, dünner Stamm. Optionale Zettelruhe-Kontaktnummer, kein Live-Sync.
  */
 
 export type Kunde = {
@@ -7,6 +7,7 @@ export type Kunde = {
   firma: string;
   name: string;
   zettelruhe_kontakt_id: string | null;
+  zettelruhe_kontaktnummer: string | null;
 };
 
 export type Projekt = {
@@ -19,7 +20,7 @@ export type Projekt = {
 
 export type KundeInput = {
   name: string;
-  zettelruhe_kontakt_id: string | null;
+  zettelruhe_kontaktnummer: string | null;
 };
 
 export type ProjektInput = {

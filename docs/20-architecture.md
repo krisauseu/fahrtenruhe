@@ -1,6 +1,6 @@
 # Architecture — Fahrtenruhe
 
-_Last updated: 2026-08-19 (Server: Host-Caddy Overlay, ADR-0023)_
+_Last updated: 2026-08-21 (Kontaktnummer-CSV, ADR-0024)_
 
 ## Stack
 
@@ -28,7 +28,7 @@ Lokal: `docker compose up`. Server: Overlay `docker-compose.server.yml`, Site-Bl
 | `platform` | Firma, Nutzer:in, Mitgliedschaft, Session, Setup; Verfahrensdoku-Vorlage (`/app/verfahren`, kein Zertifikat) |
 | `vehicles` | Fahrzeug, Kennzeichen als Name, außer Betrieb, Eröffnungs-Kilometerstand |
 | `places` | Stammorte Wohnung / erste Tätigkeitsstätte |
-| `contacts` | Kund:in, Projekt, optionale Zettelruhe-Id |
+| `contacts` | Kund:in, Projekt, optionale Zettelruhe-Kontaktnummer; CSV-Import aus Zettelruhe |
 | `trips` | Fahrt, offene Fahrt, Nutzungstyp, Lücke, Korrekturspur, Übernahme-Altbestand, Abrechnungsstatus |
 | `reporting` | Iststand (`/app/iststand`, GET-Filter), Jahresnachweis PDF/CSV/JSON (`/app/jahresnachweis`), Kilometerpauschale-Parameter |
 
@@ -45,7 +45,8 @@ firmen
                      kilometerstand_ende (Text, leer = offen — PB-Number ist nie leer);
                      uebernahme (bool) für gekennzeichneten Altbestand
       korrekturspuren
-  kunden             lokal, optional zettelruhe_kontakt_id
+  kunden             lokal, optional zettelruhe_kontaktnummer (Join),
+                     zettelruhe_kontakt_id bleibt Altbestand
     projekte         optional zettelruhe_projekt_id
 ```
 
@@ -59,7 +60,7 @@ Eine offene Fahrt pro Fahrzeug. Speichern blockt, wenn `ende(n) ≠ start(n+1)`.
 - PocketBase 0.39.10 (wie Zettelruhe)
 - Iststand: GET `/app/iststand` (Jahr/Monat/Zeitraum/Kund:in). Eine Addition (`addiereIststand`); kein Forecast.
 - Jahresnachweis: GET `/app/jahresnachweis` plus Downloads `/app/jahresnachweis/pdf|csv|json`. PDF je Fahrzeug *ist* das Buch (inklusive Korrekturspur). CSV/JSON: ganzes Buch und nur abrechenbare Fahrten.
-- v1-Schnittstelle Zettelruhe: Datei-Export, keine Live-API
+- Schnittstelle Zettelruhe: Datei (Kontakte-CSV herein, abrechenbare Fahrten hinaus), keine Live-API. Join über Zettelruhe-Kontaktnummer (ADR-0024).
 - PWA-light (ADR-0010): `/manifest.webmanifest`, Icons 192/512 + Apple-Touch 180 aus dem Auftraggeber-Logo (`public/brand/fahrtenruhe-mark.png`), `start_url` `/app`, `display: standalone`, Theme-Farbe hell (`#f4fbfc`). Kein Service Worker, kein GPS, kein App-Store-Client. Erfassung bleibt Form-POST über Next. UI-Default ist Hell (nicht System-Dark); Dark nur nach bewusstem Toggle.
 - Übernahme-Altbestand light (ADR-0018): `/app/fahrten/uebernahme` — geschlossene, gekennzeichnete Fahrt mit Korrekturspur. Kein Excel-Rekonstrukteur, keine stille Lückenfüllung.
 - Verfahrensdoku (ADR-0016): Vorlage `docs/verfahrensdokumentation.md`, UI `/app/verfahren`. Kein Zertifikat.

@@ -33,7 +33,7 @@ export async function POST(
   try {
     await updateKunde(session.firmaId, id, {
       name: formStr(formData, "name"),
-      zettelruhe_kontakt_id: formStr(formData, "zettelruhe_kontakt_id"),
+      zettelruhe_kontaktnummer: formStr(formData, "zettelruhe_kontaktnummer"),
     });
     return seeOtherWith(failPath, { gespeichert: "1" });
   } catch (e) {

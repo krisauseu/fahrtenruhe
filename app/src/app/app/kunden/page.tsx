@@ -26,12 +26,20 @@ export default async function KundenPage({
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Kund:innen"
-        description="Lokaler, dünner Stamm. Die Kund:in ist an der Fahrt optional. Kein Live-Abgleich mit Zettelruhe."
+        description="Lokaler, dünner Stamm. Die Kund:in ist an der Fahrt optional. Namen aus Zettelruhe per CSV, kein Live-Abgleich."
       >
         {session.kannSchreiben ? (
-          <Link href="/app/kunden/neu" className={cn(buttonVariants())}>
-            Kund:in anlegen
-          </Link>
+          <>
+            <Link
+              href="/app/kunden/import"
+              className={cn(buttonVariants({ variant: "outline" }))}
+            >
+              CSV-Import
+            </Link>
+            <Link href="/app/kunden/neu" className={cn(buttonVariants())}>
+              Kund:in anlegen
+            </Link>
+          </>
         ) : null}
       </PageHeader>
 
@@ -43,12 +51,20 @@ export default async function KundenPage({
       {kunden.length === 0 ? (
         <EmptyState
           title="Noch keine Kund:in"
-          description="Betriebliche Fahrten gehen auch ohne Kund:in — dann ist der Zweck Pflicht."
+          description="Betriebliche Fahrten gehen auch ohne Kund:in — dann ist der Zweck Pflicht. Namen aus Zettelruhe per CSV-Import."
         >
           {session.kannSchreiben ? (
-            <Link href="/app/kunden/neu" className={cn(buttonVariants())}>
-              Kund:in anlegen
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/app/kunden/import"
+                className={cn(buttonVariants({ variant: "outline" }))}
+              >
+                CSV-Import
+              </Link>
+              <Link href="/app/kunden/neu" className={cn(buttonVariants())}>
+                Kund:in anlegen
+              </Link>
+            </div>
           ) : null}
         </EmptyState>
       ) : (
@@ -72,7 +88,9 @@ export default async function KundenPage({
                           : n === 1
                             ? "1 Projekt"
                             : `${n} Projekte`}
-                        {k.zettelruhe_kontakt_id ? " · Zettelruhe-Id" : ""}
+                        {k.zettelruhe_kontaktnummer
+                          ? ` · ${k.zettelruhe_kontaktnummer}`
+                          : ""}
                       </span>
                     </Link>
                   </li>

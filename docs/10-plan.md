@@ -32,7 +32,7 @@ _Last updated: 2026-08-19_
 
 ## Current focus
 
-v1 vollständig. Maintenance. Domain bleibt geschlossen. Server: Host-Caddy Overlay (ADR-0023).
+v1 vollständig. Maintenance. Domain bleibt geschlossen. Server: Host-Caddy Overlay (ADR-0023). Kund:innen-Stamm: Zettelruhe-Kontakte-CSV, Join Kontaktnummer (ADR-0024).
 
 ## Parking lot
 

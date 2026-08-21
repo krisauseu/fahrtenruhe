@@ -78,8 +78,12 @@ Stammort — der eine regelmäßige betriebliche Anlaufort der Firma (Büro, Wer
 _Avoid_: Betriebsstätte (als Produktwort), Arbeitsort (zu weit — Baustellen sind Ziele, keine Tätigkeitsstätte)
 
 **Kund:in**:
-Lokaler, dünner Stamm in Fahrtenruhe: Name plus optionale Zettelruhe-Kontakt-Id. Keine Pflicht am Buch. Betriebliche Fahrten ohne Kund:in sind zulässig, dann ist der Zweck konkret. Kein Live-Sync.
-_Avoid_: Client, Buyer; Kontakt (solange Fahrtenruhe keinen Lieferanten-Begriff braucht); Kundennummer (die gibt es in Zettelruhe nicht)
+Lokaler, dünner Stamm in Fahrtenruhe: Name plus optionale Zettelruhe-Kontaktnummer. Keine Pflicht am Buch. Betriebliche Fahrten ohne Kund:in sind zulässig, dann ist der Zweck konkret. Kein Live-Sync.
+_Avoid_: Client, Buyer; Kontakt (solange Fahrtenruhe keinen Lieferanten-Begriff braucht); Kundennummer (in Zettelruhe heißt der Schlüssel Kontaktnummer)
+
+**Zettelruhe-Kontaktnummer**:
+Der stabile Datei-Schlüssel zur:m Kontakt in Zettelruhe, übernommen in den lokalen Stamm. Nicht die PocketBase-Id. Kein Live-Lookup.
+_Avoid_: Zettelruhe-Kontakt-Id, Kundennummer
 
 **Abrechnungsstatus**:
 Ob eine betriebliche Fahrt nach Zettelruhe exportiert werden soll: abrechenbar, nicht abrechenbar, abgerechnet. Default abrechenbar nur mit gesetzter Kund:in. v1 setzt nicht selbst auf abgerechnet — das bleibt nach dem Import Zettelruhes Sache.
@@ -141,5 +145,5 @@ _Avoid_: Audit log (als alleiniges, im Alltag unsichtbares Admin-Protokoll), Sof
 - **v1-Betrieb**: Self-hosted; AGPL-3.0; Solo-Selbstständige in Deutschland; Schema firma- und fahrzeuggebunden; Auth/Mitgliedschaft nach Zettelruhe-Muster, UX darf bei einer Firma und der:dem Eigentümer:in bleiben. Erfassung als Web-PWA, kein App Store. Verfahrensdokumentation als Vorlage, kein Zertifikat.
 - **Markt**: Deutschland (EStG-Fahrtenbuch, GoBD-Mindeststandard ohne externe Zertifizierung). Kein DACH, keine GmbH-1-%-Strecke in v1.
 - **Steuer v1**: Nachweis der Jahresquote und Vorlage für die Vermögenszuordnung. Buchjahr = Kalenderjahr. Keine Elster-Abgabe, keine 1-%-Berechnung, keine AfA-Engine, keine Entfernungspauschale, keine Kfz-Kosten (Belege bleiben in Zettelruhe), keine Hochrechnung.
-- **Abrechnung**: Fahrtenruhe erzeugt keine Rechnung. Lokaler Kund:innen-/Projektstamm mit optionaler Zettelruhe-Id; v1-Schnittstelle ist Export, keine Live-API, kein gemeinsames PocketBase.
+- **Abrechnung**: Fahrtenruhe erzeugt keine Rechnung. Lokaler Kund:innen-/Projektstamm mit optionaler Zettelruhe-Kontaktnummer; Schnittstelle ist Datei (Kontakte herein, abrechenbare Fahrten hinaus), keine Live-API, kein gemeinsames PocketBase.
 - **Nicht v1**: Fuhrpark/Pool, mehrere Fahrer:innen als Produkt, nativer App-Store-Client, GPS-Pflicht, Verpflegungspauschalen, Familienheimfahrt als eigener Typ (solange nicht gebraucht), abweichendes Wirtschaftsjahr.

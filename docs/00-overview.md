@@ -20,6 +20,7 @@ Ein ordnungsgemäßes elektronisches Fahrtenbuch je Fahrzeug führen: lückenlos
 - Ein Fahrzeug, ein Kalenderjahr, geschlossene Kilometerkette, PDF mit Korrekturspur
 - Iststand jederzeit (Jahr / Monat / Kund:in)
 - Export abrechenbarer Fahrten, den Zettelruhe später schlucken kann
+- Kund:innen-Stamm aus Zettelruhes Kontakte-CSV (Kontaktnummer als Join)
 - `docker compose up` wie Zettelruhe
 
 ## Stakeholders / context

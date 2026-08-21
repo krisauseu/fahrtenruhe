@@ -2,7 +2,7 @@
 
 ## v1 (dieses Repo)
 
-Bauabschnitte 1–9 in [`10-plan.md`](./10-plan.md). Happy Path: Setup → Fahrzeug + Stammorte → Live-Fahrten → Iststand → Jahres-PDF/CSV → Export abrechenbarer Fahrten. Look & Feel: helles Default-Theme, Logo in UI/PWA.
+Bauabschnitte 1–9 in [`10-plan.md`](./10-plan.md). Happy Path: Setup → Fahrzeug + Stammorte → Live-Fahrten → Iststand → Jahres-PDF/CSV → Export abrechenbarer Fahrten. Look & Feel: helles Default-Theme, Logo in UI/PWA. Kund:innen-Stamm aus Zettelruhes Kontakte-CSV (Kontaktnummer).
 
 ## Später
 

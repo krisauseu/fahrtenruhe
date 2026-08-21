@@ -1,18 +1,24 @@
 /**
  * Reine Domain-Invarianten Kund:in / Projekt (ohne I/O).
- * Lokal und dünn. Zettelruhe-Ids sind optionale Merker, kein Live-Abgleich.
+ * Lokal und dünn. Zettelruhe-Kontaktnummer ist optionaler Merker, kein Live-Abgleich.
  */
 
 import type { KundeInput, ProjektInput } from "./types";
 
 export const NAME_MAX = 200;
 export const ZETTELRUHE_ID_MAX = 40;
+export const ZETTELRUHE_KONTAKTNUMMER_MAX = 32;
 
 export const NAME_PFLICHT_ERROR = "Name ist erforderlich.";
 
 export const KUNDE_PFLICHT_ERROR = "Kund:in ist erforderlich.";
 
 export const ZETTELRUHE_ID_ZU_LANG_ERROR = `Zettelruhe-Id ist zu lang (max. ${ZETTELRUHE_ID_MAX} Zeichen).`;
+
+export const ZETTELRUHE_KONTAKTNUMMER_ZU_LANG_ERROR = `Zettelruhe-Kontaktnummer ist zu lang (max. ${ZETTELRUHE_KONTAKTNUMMER_MAX} Zeichen).`;
+
+export const KONTAKTNUMMER_DOPPELT_ERROR =
+  "Diese Zettelruhe-Kontaktnummer ist bereits vergeben.";
 
 export function normalizeName(raw: string): string {
   return (raw ?? "").trim().replace(/\s+/g, " ");
@@ -28,9 +34,29 @@ export function normalizeZettelruheId(raw: string | null | undefined): string | 
   return t;
 }
 
+/** Leere Nummer wird null. Kein Prefix-Zwang, kein Live-Lookup. */
+export function normalizeKontaktnummer(
+  raw: string | null | undefined,
+): string | null {
+  const t = (raw ?? "").trim();
+  if (!t) return null;
+  if (t.length > ZETTELRUHE_KONTAKTNUMMER_MAX) {
+    throw new Error(ZETTELRUHE_KONTAKTNUMMER_ZU_LANG_ERROR);
+  }
+  return t;
+}
+
+export function isDuplicateKontaktnummerError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return (
+    /zettelruhe_kontaktnummer/i.test(msg) &&
+    (/unique/i.test(msg) || /bereits/i.test(msg))
+  );
+}
+
 export function validateKundeInput(input: {
   name: string;
-  zettelruhe_kontakt_id?: string | null;
+  zettelruhe_kontaktnummer?: string | null;
 }): KundeInput {
   const name = normalizeName(input.name);
   if (!name) {
@@ -41,7 +67,9 @@ export function validateKundeInput(input: {
   }
   return {
     name,
-    zettelruhe_kontakt_id: normalizeZettelruheId(input.zettelruhe_kontakt_id),
+    zettelruhe_kontaktnummer: normalizeKontaktnummer(
+      input.zettelruhe_kontaktnummer,
+    ),
   };
 }
 

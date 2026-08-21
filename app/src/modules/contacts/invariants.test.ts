@@ -3,35 +3,61 @@ import {
   KUNDE_PFLICHT_ERROR,
   NAME_PFLICHT_ERROR,
   ZETTELRUHE_ID_ZU_LANG_ERROR,
+  ZETTELRUHE_KONTAKTNUMMER_ZU_LANG_ERROR,
+  isDuplicateKontaktnummerError,
+  KONTAKTNUMMER_DOPPELT_ERROR,
   normalizeZettelruheId,
   validateKundeInput,
   validateProjektInput,
 } from "./invariants";
 
 describe("Kund:in dünn", () => {
-  it("nimmt Name an und lässt die Zettelruhe-Id weg", () => {
-    expect(
-      validateKundeInput({ name: "  Müller GmbH  ", zettelruhe_kontakt_id: "" }),
-    ).toEqual({
-      name: "Müller GmbH",
-      zettelruhe_kontakt_id: null,
-    });
-  });
-
-  it("bewahrt eine optionale Zettelruhe-Kontakt-Id als Merker", () => {
+  it("nimmt Name an und lässt die Zettelruhe-Kontaktnummer weg", () => {
     expect(
       validateKundeInput({
-        name: "Müller GmbH",
-        zettelruhe_kontakt_id: " abc123xyz456789 ",
+        name: "  Müller GmbH  ",
+        zettelruhe_kontaktnummer: "",
       }),
     ).toEqual({
       name: "Müller GmbH",
-      zettelruhe_kontakt_id: "abc123xyz456789",
+      zettelruhe_kontaktnummer: null,
     });
+  });
+
+  it("bewahrt eine optionale Zettelruhe-Kontaktnummer als Merker", () => {
+    expect(
+      validateKundeInput({
+        name: "Müller GmbH",
+        zettelruhe_kontaktnummer: " KT-0001 ",
+      }),
+    ).toEqual({
+      name: "Müller GmbH",
+      zettelruhe_kontaktnummer: "KT-0001",
+    });
+  });
+
+  it("lehnt eine zu lange Kontaktnummer ab", () => {
+    expect(() =>
+      validateKundeInput({
+        name: "Müller GmbH",
+        zettelruhe_kontaktnummer: "K".repeat(33),
+      }),
+    ).toThrow(ZETTELRUHE_KONTAKTNUMMER_ZU_LANG_ERROR);
   });
 
   it("verlangt den Namen", () => {
     expect(() => validateKundeInput({ name: "  " })).toThrow(NAME_PFLICHT_ERROR);
+  });
+
+  it("erkennt doppelte Kontaktnummer an der PocketBase-Meldung", () => {
+    expect(
+      isDuplicateKontaktnummerError(
+        new Error(
+          "PocketBase 400: Failed to create record. (zettelruhe_kontaktnummer: Value must be unique.)",
+        ),
+      ),
+    ).toBe(true);
+    expect(KONTAKTNUMMER_DOPPELT_ERROR).toMatch(/bereits/);
   });
 });
 

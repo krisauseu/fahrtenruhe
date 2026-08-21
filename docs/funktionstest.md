@@ -26,6 +26,8 @@ Zwei Geräte, dieselbe Instanz. Desktop trägt den Buch-Nachweis; das Handy die 
 - [ ] `APP_URL` = öffentliche HTTPS-URL ohne trailing slash; Next **neu gebaut**
 - [ ] `curl -sSI "$APP_URL/health"` → 200, Zertifikat ohne Ausnahme, `"service":"fahrtenruhe"`, `"ok":true`
 - [ ] `curl -sSI "$APP_URL/app"` → 307 `/login`
+- [ ] `curl -sS -o /dev/null -w '%{content_type}\n' "$APP_URL/_next/static/chunks/probe.css"` → `text/html` (Next). `application/json` = Caddy `handle /_*` hat `/_next` an PocketBase gegeben
+- [ ] `/setup` bzw. `/login`: Logo sichtbar, Formular gestylt (kein nacktes HTML)
 - [ ] Secrets: keine `change-me`-Werte; Superuser ≠ App-Login
 - [ ] Browser über den öffentlichen Host, nicht `http://127.0.0.1:3001`
 
@@ -52,6 +54,7 @@ Zwei Geräte, dieselbe Instanz. Desktop trägt den Buch-Nachweis; das Handy die 
 - [ ] Fällt die Anschrift zusammen: Nutzungstyp Wohnung–Tätigkeitsstätte **nicht** im Start-Formular
 - [ ] Fahrzeug anlegen (Kennzeichen, Eröffnungs-Kilometerstand, Inbetriebnahme); Liste `/app/fahrzeuge`
 - [ ] Kund:in optional `/app/kunden`; betriebliche Fahrt ohne Kund:in braucht einen konkreten Zweck
+- [ ] CSV-Import `/app/kunden/import`: Zettelruhe-Kontakte-CSV, nur Kund:innen, Join über Kontaktnummer; Re-Import aktualisiert den Namen, keine Duplikate
 - [ ] Buchjahr-Banner **Nicht nachweistauglich**, solange die Kette ab Pflichtstart nicht lückenlos ist
 
 ---

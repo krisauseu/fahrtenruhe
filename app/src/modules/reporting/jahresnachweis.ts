@@ -61,6 +61,7 @@ export const BUCH_CSV_HEADERS = [
   "projekt_name",
   "abrechnungsstatus",
   "zettelruhe_kontakt_id",
+  "zettelruhe_kontaktnummer",
   "zettelruhe_projekt_id",
   "angelegt_am",
   "vervollstaendigt_am",
@@ -82,6 +83,7 @@ export type JahresnachweisZeile = {
   kunde_name: string | null;
   projekt_name: string | null;
   zettelruhe_kontakt_id: string | null;
+  zettelruhe_kontaktnummer: string | null;
   zettelruhe_projekt_id: string | null;
   korrekturspuren: Korrekturspur[];
 };
@@ -254,6 +256,7 @@ export function baueJahresnachweis(input: {
       kunde_name: kunde?.name ?? nameZuId(input.kunden, fahrt.kunde),
       projekt_name: projekt?.name ?? nameZuId(input.projekte, fahrt.projekt),
       zettelruhe_kontakt_id: kunde?.zettelruhe_kontakt_id ?? null,
+      zettelruhe_kontaktnummer: kunde?.zettelruhe_kontaktnummer ?? null,
       zettelruhe_projekt_id: projekt?.zettelruhe_projekt_id ?? null,
       korrekturspuren: spuren.get(fahrt.id) ?? [],
     };
@@ -317,6 +320,7 @@ function zeileCsvFelder(
     zeile.projekt_name,
     f.abrechnungsstatus,
     zeile.zettelruhe_kontakt_id,
+    zeile.zettelruhe_kontaktnummer,
     zeile.zettelruhe_projekt_id,
     f.angelegt_am,
     f.vervollstaendigt_am,
@@ -365,6 +369,7 @@ export type JahresnachweisJsonFahrt = {
   projekt_name: string | null;
   abrechnungsstatus: Fahrt["abrechnungsstatus"];
   zettelruhe_kontakt_id: string | null;
+  zettelruhe_kontaktnummer: string | null;
   zettelruhe_projekt_id: string | null;
   angelegt_am: string;
   vervollstaendigt_am: string | null;
@@ -443,6 +448,7 @@ export function jahresnachweisAlsJson(
       projekt_name: z.projekt_name,
       abrechnungsstatus: z.fahrt.abrechnungsstatus,
       zettelruhe_kontakt_id: z.zettelruhe_kontakt_id,
+      zettelruhe_kontaktnummer: z.zettelruhe_kontaktnummer,
       zettelruhe_projekt_id: z.zettelruhe_projekt_id,
       angelegt_am: z.fahrt.angelegt_am,
       vervollstaendigt_am: z.fahrt.vervollstaendigt_am,

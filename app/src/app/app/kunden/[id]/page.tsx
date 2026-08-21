@@ -61,7 +61,7 @@ export default async function KundeDetailPage({
         <CardHeader>
           <CardTitle>Stammdaten</CardTitle>
           <CardDescription>
-            Name plus optionale Zettelruhe-Kontakt-Id. Kein Live-Sync.
+            Name plus optionale Zettelruhe-Kontaktnummer. Kein Live-Sync.
           </CardDescription>
         </CardHeader>
         <CardContent>

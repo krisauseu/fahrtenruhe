@@ -45,6 +45,7 @@ const mueller: Kunde = {
   firma: "firma1",
   name: "Müller GmbH",
   zettelruhe_kontakt_id: "zr-k-1",
+  zettelruhe_kontaktnummer: "KT-0001",
 };
 
 const dachausbau: Projekt = {
@@ -274,7 +275,9 @@ describe("CSV/JSON — Buch und abrechenbare Fahrten", () => {
     expect(csv).toContain("f1;");
     expect(csv).toContain("abrechenbar");
     expect(csv).toContain("zr-k-1");
+    expect(csv).toContain("KT-0001");
     expect(csv).toContain("zr-p-1");
+    expect(csv).toContain("zettelruhe_kontaktnummer");
     expect(csv).not.toContain("f2;");
     expect(csv).not.toContain("f3;");
     expect(csv).not.toContain("f4;");
@@ -291,6 +294,7 @@ describe("CSV/JSON — Buch und abrechenbare Fahrten", () => {
     expect(json.fahrten).toHaveLength(4);
     const erste = json.fahrten.find((f) => f.id === "f1");
     expect(erste?.kunde_name).toBe("Müller GmbH");
+    expect(erste?.zettelruhe_kontaktnummer).toBe("KT-0001");
     expect(erste?.korrekturspuren).toHaveLength(1);
     expect(erste?.korrekturspuren[0]?.wer).toBe("alex@example.de");
     const text = serializeJahresnachweisJson(n, "buch");

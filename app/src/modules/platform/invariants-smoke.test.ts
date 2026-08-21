@@ -180,6 +180,32 @@ describe("Erfassung BA4", () => {
   });
 });
 
+describe("Kund:innen-CSV aus Zettelruhe", () => {
+  it("legt zettelruhe_kontaktnummer an und sperrt Client-Writes", () => {
+    const src = readFileSync(
+      path.join(migrationsDir, "1730009000_kunden_kontaktnummer.js"),
+      "utf8",
+    );
+    expect(src).toMatch(/name:\s*"zettelruhe_kontaktnummer"/);
+    expect(src).toMatch(/idx_kunden_firma_kontaktnummer/);
+    expect(src).toMatch(/createRule\s*=\s*null/);
+    expect(src).toMatch(/Kein Live-Sync/);
+    expect(src).not.toMatch(/ZETTELRUHE_URL/);
+  });
+
+  it("hat /app/kunden/import ohne Live-API", () => {
+    const appDir = path.resolve(process.cwd(), "src/app");
+    const paths = walkFiles(appDir).join("\n");
+    expect(paths).toMatch(/app\/kunden\/import/);
+    const csv = readFileSync(
+      path.resolve(process.cwd(), "src/modules/contacts/csv.ts"),
+      "utf8",
+    );
+    expect(csv).toMatch(/Kein Live-Abgleich/);
+    expect(csv).not.toMatch(/ZETTELRUHE_URL/);
+  });
+});
+
 describe("Erfassung BA5", () => {
   it("hat /app/iststand ohne eigenen PDF/CSV-Download", () => {
     const appDir = path.resolve(process.cwd(), "src/app");

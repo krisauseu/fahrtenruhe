@@ -32,18 +32,18 @@ export function KundeForm({
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="zettelruhe_kontakt_id">
-            Zettelruhe-Kontakt-Id (optional)
+          <Label htmlFor="zettelruhe_kontaktnummer">
+            Zettelruhe-Kontaktnummer (optional)
           </Label>
           <Input
-            id="zettelruhe_kontakt_id"
-            name="zettelruhe_kontakt_id"
-            maxLength={40}
-            defaultValue={kunde?.zettelruhe_kontakt_id ?? ""}
+            id="zettelruhe_kontaktnummer"
+            name="zettelruhe_kontaktnummer"
+            maxLength={32}
+            defaultValue={kunde?.zettelruhe_kontaktnummer ?? ""}
             autoComplete="off"
           />
           <p className="text-xs text-muted-foreground">
-            Nur Merker für den späteren Export. Kein Live-Abgleich mit
+            Nur Merker für den Dateiaustausch. Kein Live-Abgleich mit
             Zettelruhe.
           </p>
         </div>

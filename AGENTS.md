@@ -6,7 +6,7 @@ Open-source electronic mileage log (DE, EÜR, solo). Not Zettelruhe; billing sta
 
 1. Read [`CONTEXT.md`](./CONTEXT.md) — product language. Use those terms; do not invent synonyms.
 2. Read [`docs/90-status.md`](./docs/90-status.md) — what is already decided and what the current bauabschnitt is.
-3. New hard trade-offs go in `docs/adr/NNNN-kebab.md` (next number). Do not silently reverse ADR-0001–0022.
+3. New hard trade-offs go in `docs/adr/NNNN-kebab.md` (next number). Do not silently reverse ADR-0001–0024.
 
 Do not re-open the domain grill (Nutzungstyp, separate app, only-km, name). That is closed.
 

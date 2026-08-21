@@ -35,7 +35,7 @@ Ausgangspunkt für die individuelle Verfahrensdokumentation.
 3. **Vervollständigung**: Zweck, Ziel und optionale Kund:in/Projekt am **selben Kalendertag** (Europe/Berlin) nachziehen.
 4. **Nach Mitternacht**: nur noch mit sichtbarer **Korrekturspur** (wer, wann, vorher, nachher). Keine stille Überschreibung, kein Löschen, kein Storno.
 5. **Übernahme-Altbestand**: gekennzeichnete geschlossene Fahrt aus Papier oder Datei, immer mit Korrekturspur. Kein stiller Import, kein Excel-Rekonstrukteur, keine automatische Lückenfüllung mit privat. Ohne lückenlose Kette ab dem 1. Januar bzw. der Inbetriebnahme bleibt das Buchjahr **nicht nachweistauglich**.
-6. **Nachweis**: Das PDF je Fahrzeug *ist* das Buch (fortlaufende Fahrten inklusive Korrekturspur). Iststand jederzeit dieselbe Addition. CSV/JSON des Buchs und der abrechenbaren Fahrten — Datei-Export, keine Live-API nach Zettelruhe.
+6. **Nachweis**: Das PDF je Fahrzeug *ist* das Buch (fortlaufende Fahrten inklusive Korrekturspur). Iststand jederzeit dieselbe Addition. CSV/JSON des Buchs und der abrechenbaren Fahrten — Datei, keine Live-API nach Zettelruhe. Kund:innen-Stamm per Zettelruhe-Kontakte-CSV (Kontaktnummer).
 
 Perioden und steuerliche Tagesgrenzen: **Europe/Berlin** (Buchjahr = Kalenderjahr).
 
@@ -53,7 +53,8 @@ Perioden und steuerliche Tagesgrenzen: **Europe/Berlin** (Buchjahr = Kalenderjah
 | Iststand | km je Nutzungstyp, Jahresquote, Band der Vermögenszuordnung, Kilometerpauschale | Jederzeit; keine Hochrechnung |
 | Jahresnachweis-PDF | Fahrtenbuch je Fahrzeug inklusive Korrekturspur | Das PDF *ist* das Buch für die Einsichtnahme (ADR-0014) |
 | Buch CSV/JSON | Alle Fahrten des Buchjahrs plus Korrekturspur | Semikolon, UTF-8 BOM beim CSV |
-| Abrechenbare Fahrten CSV/JSON | Geschlossene betriebliche Fahrten mit Status abrechenbar | Datei-Export nach Zettelruhe, keine Live-API |
+| Abrechenbare Fahrten CSV/JSON | Geschlossene betriebliche Fahrten mit Status abrechenbar | Datei nach Zettelruhe, Join über Kontaktnummer, keine Live-API |
+| Kund:innen-CSV | Name + Zettelruhe-Kontaktnummer aus Zettelruhes Kontakte-Export | Inbound, kein Live-Sync |
 
 Ein angebrochenes Buchjahr ohne lückenlose Kette ab Pflichtstart (1. Januar oder Inbetriebnahme) wird in UI und PDF als **nicht nachweistauglich** geführt.
 

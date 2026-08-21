@@ -34,6 +34,7 @@ const mueller: Kunde = {
   firma: "firma1",
   name: "Müller GmbH",
   zettelruhe_kontakt_id: null,
+  zettelruhe_kontaktnummer: null,
 };
 
 const dach: Projekt = {

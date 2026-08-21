@@ -10,7 +10,17 @@ import {
   pbEq,
   updateRecord,
 } from "@/lib/pb";
-import { validateKundeInput, validateProjektInput } from "./invariants";
+import {
+  beschreibeKundenImport,
+  parseKundenCsv,
+  planeKundenImport,
+} from "./csv";
+import {
+  isDuplicateKontaktnummerError,
+  KONTAKTNUMMER_DOPPELT_ERROR,
+  validateKundeInput,
+  validateProjektInput,
+} from "./invariants";
 import type { Kunde, Projekt } from "./types";
 
 const COL_KUNDEN = "kunden";
@@ -21,6 +31,7 @@ type PbKunde = {
   firma: string;
   name: string;
   zettelruhe_kontakt_id?: string;
+  zettelruhe_kontaktnummer?: string;
 };
 
 type PbProjekt = {
@@ -37,7 +48,18 @@ function mapKunde(r: PbKunde): Kunde {
     firma: r.firma,
     name: r.name,
     zettelruhe_kontakt_id: (r.zettelruhe_kontakt_id ?? "").trim() || null,
+    zettelruhe_kontaktnummer:
+      (r.zettelruhe_kontaktnummer ?? "").trim() || null,
   };
+}
+
+function wrapKontaktnummerError<T>(fn: () => Promise<T>): Promise<T> {
+  return fn().catch((e: unknown) => {
+    if (isDuplicateKontaktnummerError(e)) {
+      throw new Error(KONTAKTNUMMER_DOPPELT_ERROR);
+    }
+    throw e;
+  });
 }
 
 function mapProjekt(r: PbProjekt): Projekt {
@@ -82,32 +104,94 @@ export async function getKunde(
 
 export async function createKunde(
   firmaId: string,
-  input: { name: string; zettelruhe_kontakt_id?: string | null },
+  input: { name: string; zettelruhe_kontaktnummer?: string | null },
 ): Promise<Kunde> {
   const v = validateKundeInput(input);
-  const r = await createRecord<PbKunde>(COL_KUNDEN, {
-    firma: firmaId,
-    name: v.name,
-    zettelruhe_kontakt_id: v.zettelruhe_kontakt_id ?? "",
-  });
+  const r = await wrapKontaktnummerError(() =>
+    createRecord<PbKunde>(COL_KUNDEN, {
+      firma: firmaId,
+      name: v.name,
+      zettelruhe_kontaktnummer: v.zettelruhe_kontaktnummer ?? "",
+    }),
+  );
   return mapKunde(r);
 }
 
 export async function updateKunde(
   firmaId: string,
   id: string,
-  input: { name: string; zettelruhe_kontakt_id?: string | null },
+  input: { name: string; zettelruhe_kontaktnummer?: string | null },
 ): Promise<Kunde> {
   const existing = await getKunde(firmaId, id);
   if (!existing) {
     throw new Error("Kund:in nicht gefunden.");
   }
   const v = validateKundeInput(input);
-  const r = await updateRecord<PbKunde>(COL_KUNDEN, existing.id, {
-    name: v.name,
-    zettelruhe_kontakt_id: v.zettelruhe_kontakt_id ?? "",
-  });
+  const r = await wrapKontaktnummerError(() =>
+    updateRecord<PbKunde>(COL_KUNDEN, existing.id, {
+      name: v.name,
+      zettelruhe_kontaktnummer: v.zettelruhe_kontaktnummer ?? "",
+    }),
+  );
   return mapKunde(r);
+}
+
+export type KundenImportErgebnis = {
+  angelegt: number;
+  aktualisiert: number;
+  uebersprungen: number;
+  text: string;
+};
+
+export async function importKundenAusCsv(
+  firmaId: string,
+  text: string,
+): Promise<KundenImportErgebnis> {
+  const parsed = parseKundenCsv(text);
+  if (parsed.errors.length > 0 && parsed.items.length === 0) {
+    throw new Error(parsed.errors.join(" "));
+  }
+  const bestehend = await listKunden(firmaId);
+  const plan = planeKundenImport(parsed, bestehend);
+
+  let angelegt = 0;
+  let aktualisiert = 0;
+  const failures: string[] = [];
+
+  for (const zeile of plan.anlegen) {
+    try {
+      await createKunde(firmaId, zeile);
+      angelegt += 1;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "unbekannt";
+      failures.push(`${zeile.name}: ${msg}`);
+    }
+  }
+  for (const zeile of plan.aktualisieren) {
+    try {
+      await updateKunde(firmaId, zeile.id, {
+        name: zeile.name,
+        zettelruhe_kontaktnummer: zeile.zettelruhe_kontaktnummer,
+      });
+      aktualisiert += 1;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "unbekannt";
+      failures.push(`${zeile.name}: ${msg}`);
+    }
+  }
+
+  const ergebnis = {
+    angelegt,
+    aktualisiert,
+    uebersprungen: plan.uebersprungen,
+  };
+  const zusammenfassung = beschreibeKundenImport(ergebnis);
+  if (failures.length > 0) {
+    throw new Error(
+      `${zusammenfassung} ${failures.length} Fehler: ${failures.slice(0, 3).join("; ")}`,
+    );
+  }
+  return { ...ergebnis, text: zusammenfassung };
 }
 
 export async function listProjekte(
