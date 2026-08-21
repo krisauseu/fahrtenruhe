@@ -26,7 +26,7 @@ export default async function KundenPage({
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Kund:innen"
-        description="Lokaler, dünner Stamm. Die Kund:in ist an der Fahrt optional. Namen aus Zettelruhe per CSV, kein Live-Abgleich."
+        description="Lokaler, dünner Stamm. Die Kund:in ist an der Fahrt optional. Kein Live-Abgleich mit Zettelruhe."
       >
         {session.kannSchreiben ? (
           <>

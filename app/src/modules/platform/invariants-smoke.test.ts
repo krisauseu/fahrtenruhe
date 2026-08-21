@@ -276,6 +276,17 @@ describe("Erfassung BA7", () => {
     expect(ende).toMatch(/pattern="\[0-9\]\+"/);
     expect(ende).not.toMatch(/geolocation|getCurrentPosition/i);
   });
+
+  it("stapelt PageHeader-Aktionen unter den Titel, statt ihn zu quetschen", () => {
+    const src = readFileSync(
+      path.resolve(process.cwd(), "src/components/ui/page-header.tsx"),
+      "utf8",
+    );
+    expect(src).toMatch(/flex-col/);
+    expect(src).toMatch(/sm:flex-row/);
+    expect(src).not.toMatch(/basis-0/);
+    expect(src).not.toMatch(/flex-wrap items-start justify-between/);
+  });
 });
 
 describe("Erfassung BA8", () => {

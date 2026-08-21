@@ -76,7 +76,7 @@ export default async function KundeDetailPage({
 
       <Card>
         <CardHeader>
-          <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <CardTitle>Projekte</CardTitle>
               <CardDescription>
