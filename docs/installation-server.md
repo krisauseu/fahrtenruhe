@@ -68,6 +68,8 @@ Optional global, nur einmal oben in der Host-Caddyfile:
 
 `/_/` (PocketBase-Admin) bleibt über denselben Host erreichbar. Wer den Admin nicht im Netz will, sperrt das am Host (VPN / Allowlist) — dieser Schnitt tut das nicht.
 
+**Nicht `handle /_*`.** Caddy matcht `/_*` als Prefix und schluckt Next.js `/_next` (CSS, JS, Logo-Optimizer). Im Browser: Setup/Login wie ungestyltes HTML, kaputtes Logo; `curl` auf `/_next/…` liefert PocketBase-JSON `{"message":"File not found."}`. Immer den Site-Block aus `deploy/Caddyfile.host` nehmen: `/_next*` **zuerst** auf Next, Admin nur als `/_/*`.
+
 ```bash
 sudo caddy validate --config /etc/caddy/Caddyfile
 sudo systemctl reload caddy
@@ -91,6 +93,11 @@ curl -sSI https://app.example.de/health
 
 curl -sSI https://app.example.de/app
 # 307 → /login
+
+# /_next muss bei Next landen, nicht bei PocketBase
+curl -sS -o /dev/null -w '%{content_type}\n' https://app.example.de/_next/static/chunks/probe.css
+# erwartet: text/html   (Next-404)
+# falsch:   application/json  → Caddy hat /_next an PocketBase gegeben (handle /_*)
 ```
 
 Browser: `https://app.example.de/setup` (leere Instanz) oder `/login`. Cookie `fahrtenruhe_session` mit Flag **Secure**. Superuser nur unter `https://app.example.de/_/` — nicht als App-Login.

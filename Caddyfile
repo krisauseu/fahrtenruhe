@@ -14,12 +14,23 @@
 		-Server
 	}
 
+	# Next.js-Assets VOR PocketBase. Niemals `handle /_*` — das Prefix
+	# matcht /_next (CSS, JS, Image-Optimizer). Immer /_/* für den Admin.
+	handle /_next* {
+		reverse_proxy next:3000 {
+			header_up Host {host}
+			header_up X-Forwarded-Host {host}
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Forwarded-For {remote_host}
+		}
+	}
+
 	# PocketBase API
 	handle /api/* {
 		reverse_proxy pocketbase:8090
 	}
 
-	# PocketBase Admin-UI und Realtime
+	# PocketBase Admin-UI — nur /_/…, nicht /_*
 	handle /_/* {
 		reverse_proxy pocketbase:8090
 	}

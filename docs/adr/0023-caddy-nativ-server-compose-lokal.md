@@ -8,3 +8,7 @@ Auf dem öffentlichen Host terminiert das **bereits laufende Host-Caddy** (Syste
 - Host-Caddy nur auf Compose-Caddy `:80` — zusätzlicher Hop, Compose-Caddy müsste auf dem Server weiter laufen.
 - Dieselben Host-Ports wie Zettelruhe (3000/8090) — auf einem gemeinsamen Test-Host eine Kollision.
 - `/_/` nicht öffentlich — in der Installationsdoku die härtere Empfehlung; hier bewusst nicht, Admin bleibt über denselben Host.
+
+## Matcher `/_next` vor `/_/`
+
+PocketBase-Admin liegt unter `/_/`. Next.js-Assets unter `/_next`. Caddy-Prefix `handle /_*` matcht beides — CSS/JS/Image-Optimizer landen bei PocketBase (`{"message":"File not found."}`), Setup und Login erscheinen ungestylt. Deshalb im Site-Block: zuerst `handle /_next*` → Next, Admin nur `handle /_/*` (nicht `/_*`).

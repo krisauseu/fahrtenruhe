@@ -29,12 +29,24 @@ app.example.de {
 		-Server
 	}
 
+	# Next.js-Assets VOR PocketBase. Niemals `handle /_*` — das Prefix
+	# matcht /_next (CSS, JS, Image-Optimizer) und liefert PB-JSON 404.
+	# Folge im Browser: Setup/Login ungestylt, Logo tot.
+	handle /_next* {
+		reverse_proxy 127.0.0.1:3001 {
+			header_up Host {host}
+			header_up X-Forwarded-Host {host}
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Forwarded-For {remote_host}
+		}
+	}
+
 	# PocketBase API
 	handle /api/* {
 		reverse_proxy 127.0.0.1:8091
 	}
 
-	# PocketBase Admin-UI und Realtime — bewusst öffentlich über denselben Host
+	# PocketBase Admin-UI — nur /_/…, nicht /_*
 	handle /_/* {
 		reverse_proxy 127.0.0.1:8091
 	}
